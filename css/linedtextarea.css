@@ -1,0 +1,88 @@
+/**
+ * jQuery Lined Textarea Plugin
+ *   http://alan.blog-city.com/jquerylinedtextarea.htm
+ *
+ * Copyright (c) 2010 Alan Williamson
+ *
+ * Released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ * 
+ * Usage:
+ *   Displays a line number count column to the left of the textarea
+ *   
+ *   Class up your textarea with a given class, or target it directly
+ *   with JQuery Selectors
+ *   
+ *   $(".lined").linedtextarea({
+ *   	selectedLine: 10,
+ *    selectedClass: 'lineselect'
+ *   });
+ *
+ */
+
+.linedwrap {
+	border: 1px solid #c0c0c0;
+	padding: 3px;
+}
+
+.linedtextarea {
+	padding: 0px;
+	margin: 0px;
+}
+
+.linedtextarea textarea, .linedwrap .codelines .lineno {
+	font-size: 10pt;
+	font-family: monospace;
+	line-height: normal !important;
+}
+
+.linedtextarea textarea {
+	padding-right:0.3em;
+	padding-top:0.3em;
+	border: 0;
+}
+
+.linedwrap .lines {
+	margin-top: 0px;
+	width: 50px;
+	float: left;
+	overflow: hidden;
+	border-right: 1px solid #c0c0c0;
+	margin-right: 10px;
+}
+
+.linedwrap .codelines {
+	padding-top: 5px;
+}
+
+.linedwrap .codelines .lineno {
+	color:#AAAAAA;
+	padding-right: 0.5em;
+	padding-top: 0.0em;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.linedwrap .codelines .lineselect {
+	color: red;
+}
+/*
+     FILE ARCHIVED ON 18:34:14 Jun 02, 2016 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 03:58:23 Aug 13, 2024.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.515
+  exclusion.robots: 0.018
+  exclusion.robots.policy: 0.008
+  esindex: 0.009
+  cdx.remote: 7.551
+  LoadShardBlock: 2637.66 (3)
+  PetaboxLoader3.datanode: 2643.776 (4)
+  load_resource: 163.564
+  PetaboxLoader3.resolve: 114.732
+*/

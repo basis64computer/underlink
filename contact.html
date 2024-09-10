@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>UnderLink - Kontak</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container px-3">
+                    <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png" width="48px" height="48px" />UnderLink</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="feedback.html">Feedback</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false>">
+                                    <img id="userProfilePhoto" src="assets/img/user.png" class="user-img" width="32px" height="32px" onload=""></img>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                    <li><a id="btn-create-account" class="dropdown-item btn-outline-dark" href="account-info.html">Lihat Akun</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Contact section-->
+            <section class="py-5" style="background-image: url('assets/img/office.jpg'); background-size: cover;">
+                <div class="container px-3 my-1">
+                    <div class="card mb-4">
+                        <div class="card-header p-4 d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row h4 display-6">
+                                <i class="bi bi-person-badge"></i>
+                                &nbsp;
+                                Kontak
+                            </div>
+                            <div class="d-flex flex-row">
+                                <div class="btn-group">
+                                    <a class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#exitModal" onclick="contact = []; setCookie('contact', null)">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                        <div class="d-none d-xl-inline">
+                                            &nbsp;Refresh
+                                        </div>
+                                        
+                                    </a>
+                                    <a class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#addContactModal">
+                                        <i class="bi bi-plus-lg"></i>
+                                        <div class="d-none d-xl-inline">
+                                            &nbsp;Buat Kontak
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="overflow-scroll border m-1 p-2" id="contactBox" style="max-width: 100%; max-height: 400px;">
+                                <table id="contactTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Kontak</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contactTableBody">
+                                        <td><div class="row"><div class="col col-1"><a href="#" onclick="scaleImage('assets/img/user.png')"><img id="profilePhoto" src="assets/img/user.png" class="user-img-64" /></a></div><div class="col col"><a class="text-decoration-none link-dark" href="chat.html"><h4 class="ms-3">Testing</h4><div class="row"><p class="col-auto ms-3">Rabu, 11 September 2024 - 09:40:11</p><h4 class="col"><p class="badge bg-primary" id="message">12</p></h4></div></a></div><div class="col col-sm d-flex justify-content-end"><div class="btn-group"><a class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#editContactModal" onclick=""><i class="bi bi-pencil-square"></i><div class="d-none d-xl-inline">&nbsp;Edit</div></a><a class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#deleteContactModal" onclick=""><i class="bi bi-x-lg"></i><div class="d-none d-xl-inline">&nbsp;Hapus</div></a></div></div></div></td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+        <!-- Add contact modal -->
+        <div id="addContactModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Buat Kontak</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="addContactIdInput" type="text" placeholder="ID" data-sb-validations="required" required/>
+                    <label for="addContactIdInput">ID</label>
+                    <div class="invalid-feedback" data-sb-feedback="addContactIdInput:required">Harus diisi.</div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="addContactNameInput" type="text" placeholder="Name" data-sb-validations="required" required/>
+                    <label for="addContactNameInput">Name</label>
+                    <div class="invalid-feedback" data-sb-feedback="addContactNameInput:required">Harus diisi.</div>
+                </div>
+              </div>
+              <div class="modal-footer d-flex flex-row">
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="addContactButton();" data-bs-dismiss="modal">Simpan</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Edit contact modal -->
+        <div id="editContactModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Kontak</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="editContactNameInput" type="text" placeholder="Name" data-sb-validations="required" required/>
+                    <label for="addContactNameInput">Name</label>
+                    <div class="invalid-feedback" data-sb-feedback="addContactNameInput:required">Harus diisi.</div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="editContactButton();" data-bs-dismiss="modal">Simpan</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Delete contact modal -->
+        <div id="deleteContactModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Hapus Kontak</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Apakah kamu ingin menghapus kontak ini?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-danger" onclick="deleteContactButton();" data-bs-dismiss="modal">Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Creates the bootstrap modal where the image will appear -->
+        <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered">
+            <img src="" id="imagepreview" style="width: 400px; height: 400px;" >
+          </div>
+        </div>
+
+        <!-- Copied modal -->
+        <div id="copiedModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Teks disalin.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer-->
+        <footer class="bg-dark py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; BASIS-64 2024</div></div>
+                    <div class="col-auto">
+                        <a class="link-light small" href="#!">Privacy</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Terms</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+        <script src="https://basis64computer.github.io/basis64-website/js/feedback.js"></script>
+        <script src="js/jquery.min.js" type="text/javascript"></script>
+        <script src="js/linedtextarea.js"></script>
+        <link href="css/linedtextarea.css" type="text/css" rel="stylesheet"/>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <script src="js/icons.js"></script>
+        <script src="js/cookie.js"></script>
+        <script src="js/contact.js"></script>
+        <script src="js/encrypt.js"></script>
+        <script src="js/visitor.js"></script>
+        <script src="js/database.js"></script>
+        <script src="js/user-photo.js"></script>
+        <script src="js/telegrambot.js"></script>
+        <script>
+            let contactTableBody = document.getElementById("contactTableBody");
+            let contactTable = document.getElementById('contactTable');
+            const contactBox = document.getElementById('contactBox');
+            let selectedID = 0;
+            let index = 1;
+            let table;
+
+            const chatInterval = setInterval(async function() {
+                    await loadDatabase();
+                    await loadContact();
+                    //table = new simpleDatatables.DataTable(messageTable);
+                    await updateTable();
+                }, 5000);
+
+            async function updateTable() {
+                let unreadMessages = 0;
+                //table.destroy();
+                if (!database.users[getCookie("id")]) {
+                    database.users[getCookie("id")] = [];
+                }
+                let chat = database.users[getCookie("id")];
+                var array = Object.keys(chat);
+                console.log(index++);
+                //console.log(contact);
+                console.log("loading contact... " + JSON.stringify(database.users));
+                for(var i=0; i<array.length; i++) {
+                    
+                    let messages = chat[array[i]].messages;
+                    let status = chat[array[i]].status;
+                    if (status == "NONE") {
+                        database.users[getCookie("id")][array[i]].status = "RECEIVED";
+                        saveDatabase();
+                        unreadMessages++;
+                    }
+                    if (messages[0]) {
+                        updateInbox(parseInt(messages[0].from_id), messages[0].from_name, messages[0].from_photo, messages[0].timestamp, messages.length);
+                    }
+                    //console.log(chat[0].from_id);
+                    
+                }
+                console.log("save contact... " + array.length);
+                if (unreadMessages > 0) {
+                    await saveContact();
+                }
+                console.log("contact saved");
+                createNewTable();
+                for(var i=0; i<contact.length; i++) {
+                    addContactTable(i, contact[i].id, contact[i].name, contact[i].photo, contact[i].timestamp, contact[i].unread_messages);
+                }
+                table = new simpleDatatables.DataTable(contactTable);
+                console.log(contactTable);
+            }
+            async function initialize() {
+                if (contactTable) {
+                    table = new simpleDatatables.DataTable(contactTable);
+                }
+                await loadDatabase();
+                await initializeContact();
+                //table = new simpleDatatables.DataTable(contactTable);
+                updateTable();
+            }
+
+            window.addEventListener('DOMContentLoaded', event => {
+                initialize();
+            });
+
+            function createNewTable() {
+                contactBox.innerHTML = "";
+                let table = document.createElement("table");
+                table.setAttribute("id", "contactTable");
+                table.innerHTML = '<thead><tr><th>Kontak</th></tr></thead><tbody id="contactTableBody"></tbody>';
+                contactBox.appendChild(table);
+                contactTableBody = document.getElementById("contactTableBody");
+                contactTable = document.getElementById('contactTable');
+            }
+            function addContactButton() {
+                let id = document.getElementById("addContactIdInput");
+                let name = document.getElementById("addContactNameInput");
+
+                addContact(id.value, name.value, "default");
+                saveContact();
+                //addContactTable(contact.length, id.value, name.value, "default");
+                updateTable();
+            }
+            function editContactButton() {
+                let name = document.getElementById("editContactNameInput");
+
+                setContactName(selectedID, name.value);
+                saveContact();
+                //addContactTable(contact.length, id.value, name.value, "default");
+                updateTable();
+            }
+
+            function deleteContactButton() {
+                deleteContact(selectedID);
+                saveContact();
+                //addContactTable(contact.length, id.value, name.value, "default");
+                updateTable();
+            }
+
+            function scaleImage(photo) {
+                console.log(photo);
+                $('#imagepreview').attr('src', photo);
+                $('#imagemodal').modal('show');
+            }
+
+            function addContactTable(num, id, name, photo, timestamp, unreadMessages) {
+                let imageSource = photo;
+                if (photo == "default") {
+                    imageSource = "assets/img/user.png";
+                }
+                var d = new Date(timestamp);
+                let date = formatDate(d, "dddd, dd MMMM yyyy - HH:mm:ss");
+                let tr = document.createElement("tr");
+                tr.innerHTML = '<td><div class="row"><div class="col col-1"><a href="#" onclick="scaleImage(\'' + imageSource + '\')"><img id="profilePhoto' + num + '" src="' + imageSource + '" class="user-img-64" /></a></div><div class="col col"><a class="text-decoration-none link-dark" href="chat.html?id=' + id + '&name=' + name + '&photo=' + photo + '"><h4 class="ms-3">' + name + '</h4></a><div class="row"><p class="col-auto ms-3">' + date + '</p><h4 class="col"><p class="badge bg-primary" id="message">' + unreadMessages + '</p></h4></div></div><div class="col col-sm d-flex justify-content-end"><div class="btn-group"><a class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#editContactModal" onclick="selectedID = ' + id.toString() + '"><i class="bi bi-pencil-square"></i><div class="d-none d-xl-inline">&nbsp;Edit</div></a><a class="btn btn-outline-dark btn-lg" data-bs-toggle="modal" data-bs-target="#deleteContactModal" onclick="selectedID = ' + id.toString() + '"><i class="bi bi-x-lg"></i><div class="d-none d-xl-inline">&nbsp;Hapus</div></a></div></div></div></td>';
+
+                contactTableBody.appendChild(tr);
+            }
+        </script>
+    </body>
+</html>

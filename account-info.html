@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>BASIS-64 Math - Lihat Akun</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100" onload="loadUserInfo();">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container px-3">
+                    <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png" width="48px" height="48px" />BASIS-64 Math</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="feedback.html">Feedback</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false>">
+                                    <img id="userProfilePhoto" src="assets/img/user.png" class="user-img" width="32px" height="32px" onload=""></img>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                    <li><a id="btn-create-account" class="dropdown-item btn-outline-dark" href="account-info.html">Lihat Akun</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Page Content-->
+            <section class="py-5">
+                <div class="container px-3 my-1">
+                    <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="bi bi-person-bounding-box"></i>
+                                    &nbsp;Informasi Akun
+                                </div>
+                                <div class="card-body">
+                                    <table id="datatablesSimple">
+                                        <div class="row gx-5 align-items-center justify-content-center">
+                                            <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img id="profilePhoto" src="assets/img/user.png" class="user-info-img" width="256px" height="256px"/></div>
+                                            <div class="col-lg-8 col-xl-7 col-xxl-6">
+                                                <div class="my-5 text-center text-xl-start">
+                                                    <h1 class="display-8 fw-bolder text-black mb-2" id="userName">Pengguna UnderLink</h1>
+                                                    <p class="lead fw-normal text-black-50 mb-4" id="userID">ID: 10000001<br/>
+                                                    </p>
+                                                    <div class="badge bg-danger rounded-pill mb-4" id="adminStatus"></div>
+                                                    <div class="badge bg-secondary rounded-pill mb-4" id="activationStatus"></div>
+                                                    <div class="d-grid gap-1 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                                                        <a id="btnActivateAccount" class="btn btn-primary btn-lg px-4 me-sm-3" href="activation.html">Aktivasi Akun</a>
+                                                        <a id="btnEditAccount" class="btn btn-warning btn-lg px-4" onclick="showEditAccountModal();">Edit Akun</a>
+                                                        <a id="btnDeleteAccount" class="btn btn-danger btn-lg px-4" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Hapus Akun</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                    <!--div class="row gx-5">
+                        <div class="col-12"><img class="img-fluid rounded-3 mb-5" src="https://dummyimage.com/1300x700/343a40/6c757d" alt="..." /></div>
+                        <div class="col-lg-6"><img class="img-fluid rounded-3 mb-5" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." /></div>
+                        <div class="col-lg-6"><img class="img-fluid rounded-3 mb-5" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." /></div>
+                    </div>
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="text-center mb-5">
+                                <p class="lead fw-normal text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Totam deserunt architecto enim eos accusantium fugit recusandae illo iste dignissimos possimus facere ducimus odit voluptatibus exercitationem, ex laudantium illum voluptatum corporis.</p>
+                                <a class="text-decoration-none" href="#!">
+                                    View project
+                                    <i class="bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div-->
+                </div>
+            </section>
+        </main>
+        <!-- Edit Account Modal-->
+        <div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary p-4">
+                        <h5 class="modal-title font-alt text-white" id="editAccountModalLabel">Edit Akun</h5>
+                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body border-0 p-4">
+                        <!-- Name input-->
+                        <div class="mb-3">
+                          <label for="profilePhotoFile" class="form-label">Foto Profil</label>
+                          <input class="form-control" type="file" id="profilePhotoFile" accept="image/*">
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="editAccountName" type="text" placeholder="Name" data-sb-validations="required" required/>
+                            <label for="editAccountName">Nama</label>
+                            <div class="invalid-feedback" data-sb-feedback="editAccountName:required">A name is required.</div>
+                        </div>
+                        <!-- Submit Button-->
+                        <div class="d-grid"><button id="btnSave" class="btn btn-primary btn-lg" onclick="saveAccount();" data-bs-dismiss="modal">Simpan</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Name modal -->
+        <div id="nameModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Nama harus diisi.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Account deleted modal -->
+        <div id="accountDeletedModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Hapus Akun</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Berhasil menghapus akun.
+                </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Delete account modal -->
+        <div id="deleteAccountModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Hapus Akun</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Apakah kamu yakin ingin menghapus akun mu? Semua data kamu termasuk aktivasi akun akan dihapus secara permanen dan tidak dapat dipulihkan.
+                </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteAccount();">Hapus Akun</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Delete account confirmation modal -->
+        <div id="deleteAccountConfirmationModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Konfirmasi Penghapusan Akun</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p id="confirmDeleteAccountTitle"></p>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="confirmDeleteAccountInput" type="text" placeholder="Name" data-sb-validations="required" required/>
+                    <label for="confirmDeleteAccountInput">Cookie ID</label>
+                    <div class="invalid-feedback" data-sb-feedback="confirmDeleteAccountInput:required">Harus diisi.</div>
+                </div>
+                <p class="text-danger" id="confirmDeleteAccountMessage"></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteAccountButton">Hapus Akun</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript">
+            async function loadUserInfo() {
+                document.getElementById("profilePhoto").src = await getCookiePhoto();
+                document.getElementById('userProfilePhoto').src = await getCookiePhoto();
+                document.getElementById("userName").innerHTML = getCookie("name");
+                document.getElementById("userID").innerHTML = "ID: " + getCookie("id");
+            }
+            function showEditAccountModal() {
+                $('#editAccountModal').modal('show');
+                let photo = document.getElementById("profilePhotoFile");
+                let name = document.getElementById("editAccountName");
+
+                photo.files = null;
+                name.value = getCookie("name");
+            }
+            async function saveAccount() {
+                const bot = new Bot(database_bot.TOKEN, database_bot.ChatID);
+                let photo = document.getElementById("profilePhotoFile");
+                let name = document.getElementById("editAccountName");
+
+                if (name.value == '') {
+                    $('#nameModal').modal('show');
+                    $('#editAccountModal').modal('hide');
+                    return;
+                }
+
+                let file = photo.files[0];
+
+                if (file) {
+                    bot.sendPhoto("#profilePhotoFile", "*Update Akun Pengguna UnderLink*\nNama: " + name.value + "\nNama sebelum diganti: " + getCookie("name") + "\nID: " + getCookie("id"), 0, "markdown", true).then(res => {
+                        console.log("Success! ", JSON.stringify(res));
+                        photoArray = res.result.photo;
+                        photo = photoArray[photoArray.length-1].file_id;
+                        setCookie("name", name.value, 0);
+                        cookieSetPhoto(photo);
+                        loadUserInfo();
+                        photo.value = '';
+                        name.value = '';
+                        $('#editAccountModal').modal('hide');
+                    }).catch(err => console.log(err))
+                } else {
+                    setCookie("name", name.value, 0);
+                    document.getElementById("userName").innerHTML = name.value;
+                    photo.value = '';
+                    name.value = '';
+                    $('#editAccountModal').modal('hide');
+                }
+            }
+            function confirmDeleteAccount() {
+                let title = document.getElementById("confirmDeleteAccountTitle");
+                let input = document.getElementById("confirmDeleteAccountInput");
+                let button = document.getElementById("confirmDeleteAccountButton");
+                let message = document.getElementById("confirmDeleteAccountMessage");
+                $('#deleteAccountConfirmationModal').modal('show');
+                $('#deleteAccountModal').modal('hide');
+
+                input.value = "";
+
+                const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                const randomString = generateRandomString(32, charset);
+
+                title.innerHTML = "Ketik atau salin kode ini ke kotak di bawah ini untuk mengkonfirmasi penghapusan akun<br/><br/>Confirmation code: " + randomString;
+
+                button.addEventListener("click", async function() {
+                    if (input.value == randomString) {
+                        $('#deleteAccountConfirmationModal').modal('hide');
+                        await generateCookies(function() {
+                            $('#accountDeletedModal').modal('show');
+                            $('#accountDeletedModal').on('hidden.bs.modal', function () {
+                                document.location.replace("index.html");
+                            });
+                        });
+                        //window.location.replace("index.html");
+                    } else {
+                        message.innerHTML = "Kode konfirmasi tidak sesuai.";
+                    }
+                }, false);
+            }
+        </script>
+        <!-- Footer-->
+        <footer class="bg-dark py-4 mt-auto">
+            <div class="container px-3">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; BASIS-64 2023</div></div>
+                    <div class="col-auto">
+                        <a class="link-light small" href="#!">Privacy</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Terms</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/icons.js"></script>
+        <script src="js/cookie.js"></script>
+        <script src="js/database.js"></script>
+        <script src="js/visitor.js"></script>
+        <script src="js/scripts.js"></script>
+        <script src="js/telegrambot.js"></script>
+        <script src="js/user-photo.js"></script>
+    </body>
+</html>

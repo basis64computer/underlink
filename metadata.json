@@ -1,0 +1,19 @@
+{
+    "from": "0123456789.... sender",
+    "destination": "123456789... chat id",
+    "metadata": {
+        "public_key": "asdasdasdasdasd... RSA public key",
+        "key": "asdasfadfafsdfdsf... AES key encrypted with RSA public key",
+    },
+    "message": {
+        
+    }
+}
+
+{
+    "type": "key",
+    "sender_name": "Rusdi",
+    "destination": "1234567890",
+    "timestamp": 1234567890,
+    "public_key": "asdasdasdasdd",
+}

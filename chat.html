@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>UnderLink - Chat</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container px-3">
+                    <a class="navbar-brand" href="index.html"><img src="assets/img/logo.png" width="48px" height="48px" />UnderLink</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="feedback.html">Feedback</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false>">
+                                    <img id="userProfilePhoto" src="assets/img/user.png" class="user-img" width="32px" height="32px" onload=""></img>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                    <li><a id="btn-create-account" class="dropdown-item btn-outline-dark" href="account-info.html">Lihat Akun</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Changelog section-->
+            <div class="pt-3">
+                <div class="container px-3 my-1">
+                    <div class="card mb-4">
+                        <div class="card-header p-4 d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row">
+                                <img id="displayPhoto" src="assets/img/user.png" alt="avatar 1" class="user-img-64 me-3">
+                                <div id="displayName" class="row align-items-center display-6">User</div>
+                            </div>
+                            <div class="d-flex flex-row d-none d-xl-block">
+                                <div class="btn-group">
+                                    <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#exitModal">
+                                        <i class="bi bi-telephone"></i>
+                                        &nbsp;Panggilan Suara
+                                    </a>
+                                    <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#loadModal">
+                                        <i class="bi bi-camera-video"></i>
+                                        &nbsp;Panggilan Video
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="overflow-scroll border m-1 p-2" id="chatBox" style="max-width: 100%; max-height: 400px;">
+                                
+                            </div>
+                            <div class="input-group mb-3 p-1">
+                                <textarea type="text" class="form-control" id="messageInput" rows="1" style="resize: none;"></textarea>
+                                <button id="sendButton" class="btn btn-primary" type="button" onclick="send();">
+                                    <i class="bi bi-send-fill"></i>
+                                    Kirim
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script type="text/javascript">
+            const chatbox = document.getElementById("chatBox");
+            const sendButton = document.getElementById("sendButton");
+            const messageInput = document.getElementById("messageInput");
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const userID = parseInt(urlParams.get("id"));
+            const userName = urlParams.get("name");
+            let userPhoto = urlParams.get("photo");
+            const displayName = document.getElementById("displayName");
+            const displayPhoto = document.getElementById("displayPhoto");
+            let margin = 0;
+            let indicators = [];
+            window.addEventListener("DOMContentLoaded", function() {
+                initialize();
+                if (!userID || !userName || !userPhoto) {
+                    window.location.replace("index.html");
+                }
+
+                let photo = userPhoto;
+                if (userPhoto == "default") {
+                    photo = "assets/img/user.png";
+                }
+
+                displayName.innerHTML = userName;
+                displayPhoto.src = photo;
+                //addTextBox3(userID, "default", "Rehan ingin memulai obrolan.", null, null, null, null);
+            });
+
+            async function initialize() {
+                await loadDatabase();
+                await initializeContact();
+                loadMessagesFromContact();
+                if (getKey(userID) == null) {
+                    messageInput.disabled = true;
+                    sendButton.innerHTML = "<i class=\"bi bi-send-fill\"></i>Mulai Obrolan";
+                }
+            }
+
+            async function deleteContactChat() {
+                deleteContact(userID);
+                await saveContact();
+                window.location.replace("contact.html");
+            }
+
+            async function loadMessagesFromContact() {
+                let position = getPositionById(userID);
+                userContact = contact[position];
+                for(var i=0; i<userContact.messages.length; i++) {
+                    let message = userContact.messages[i];
+                    var d = new Date(message.timestamp);
+                    let date = formatDate(d, "dddd, dd MMMM yyyy - HH:mm:ss");
+                    if (message.type == "RSA") {
+                        if (!getKey(userID)) {
+                            sendButton.disabled = true;
+                        }
+                        addTextBox3(userID, userPhoto, userName + " ingin memulai obrolan.", date, function() {
+                            deleteContactChat();
+                        }, function() {
+                            deleteContactChat();
+                        }, function() {
+                            if (getKey(userID)) {
+                                //return;
+                            }
+                            let key = generateChatKey();
+                            contact[position].key = key;
+                            contact[position].messages[i] = null;
+                            let indicator = addTextBox2(getCookie("photo"), "Permintaan memulai obrolan diterima.", date);
+                            sendKeyAES(userID, key, message.public_key, function() {
+                                indicator.setAttribute("class", "h4 bi bi-check");
+                            }, function() {
+                                indicator.setAttribute("class", "bi bi-ban");
+                            });
+                            indicators.push(indicator);
+                            sendButton.disabled = false;
+                        });
+                    } else if (message.type == "AES") {
+                        addTextBox(userPhoto, "Permintaan memulai obrolan diterima.", date);
+                    } else if (message.type == "message") {
+                        addTextBox(userPhoto, message.text, date);
+                    }
+                }
+            }
+
+            async function parseMessages() {
+                if (!database.users[getCookie("id")][userID]) {
+                    return;
+                }
+                let messages = database.users[getCookie("id")][userID].messages;
+                console.log(JSON.stringify(database.users));
+                let status = database.users[getCookie("id")][userID].status;
+                database.users[getCookie("id")][userID].status = "READ";
+                let position = getPositionById(userID);
+
+                for(var i=0; i<messages.length; i++) {
+                    userPhoto = messages[i].from_photo;
+                    var d = new Date(messages[i].timestamp);
+                    let date = formatDate(d, "dddd, dd MMMM yyyy - HH:mm:ss");
+                    if (messages[i].type == "RSA") {
+                        console.log("Received RSA key...");
+                        let id = contactPutRSA(userID, messages[i].timestamp, messages[i].public_key);
+                        sendButton.disabled = true;
+                        console.log("RSA message: " + messages[i].public_key);
+                        let public_key = messages[i].public_key;
+                        addTextBox3(userID, userPhoto, userName + " ingin memulai obrolan.", date, function() {
+                            deleteContactChat();
+                        }, function() {
+                            deleteContactChat();
+                        }, function() {
+                            let key = null;
+                            if (getKey(userID)) {
+                                //return;
+                                key = getKey(userID);
+                            } else {
+                                key = generateChatKey();
+                            } 
+                            contact[position].key = key;
+                            //contact[position].messages[i].shift();
+
+                            let indicator = addTextBox2(getCookie("photo"), "Permintaan memulai obrolan diterima.", date);
+                            sendKeyAES(userID, key, public_key, function() {
+                                indicator.setAttribute("class", "h4 bi bi-check");
+                            }, function() {
+                                indicator.setAttribute("class", "bi bi-ban");
+                            });
+                            indicators.push(indicator);
+                            sendButton.disabled = false;
+                        });
+                    } else if (messages[i].type == "AES") {
+                        console.log("Received AES key...");
+                        addTextBox(userPhoto, "Permintaan memulai obrolan diterima.", date);
+                        contact[position].key = await decryptRSA2(getCookie("private_key"), messages[i].key);
+                        saveContact();
+                        console.log("key: " + await decryptRSA2(getCookie("private_key"), messages[i].key));
+                        messageInput.disabled = false;
+                        sendButton.innerHTML = "<i class=\"bi bi-send-fill\"></i>Kirim";
+                    } else if (messages[i].type == "message") {
+                        let plaintext = decryptAES(messages[i].message, getKey(userID)).toString(CryptoJS.enc.Utf8);
+                        console.log("Received message... " + getKey(userID));
+                        console.log("key: " + getKey(userID) + " plaintext: " + plaintext);
+                        contactPutMessage(userID, plaintext, messages[i].timestamp);
+                        addTextBox(userPhoto, plaintext, date);
+                    }
+                }
+
+
+                saveContact();
+                clearMessages(userID);
+            }
+
+            const chatInterval = setInterval(async function() {
+                    await loadDatabase();
+                    await loadContact();
+                    parseMessages();
+
+                    if (!database.users[getCookie("id")][userID]) {
+                        return;
+                    }
+
+                    let status = database.users[userID][getCookie("id")].status;
+
+                    for(var i=0; i<indicators.length; i++) {
+                        let indicator = indicators[i];
+                        console.log(indicators);
+                        if (status == "READ") {
+                            indicator.setAttribute("class", "bi bi-check-circle-fill");
+                        } else if (status == "RECEIVED") {
+                            console.log("message received");
+                            indicator.setAttribute("class", "h4 bi bi-check-all");
+                        }
+                    }
+
+                    //table = new simpleDatatables.DataTable(messageTable);
+                }, 5000);
+
+            messageInput.addEventListener("keypress", function(event) {
+              // If the user presses the "Enter" key on the keyboard
+                if (event.key === "Enter" && event.shiftKey) {
+                    //messageInput.value = messageInput.value + "\n";
+                }
+                else if (event.key === "Enter") {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    //document.getElementById("myBtn").click();
+                    send();
+                }
+            }); 
+
+            let oldDate;
+            let spam = 0;
+            function send() {
+                var d = new Date();
+                let date = formatDate(d, "dddd, dd MMMM yyyy - HH:mm:ss");
+                if (messageInput.disabled) {
+                    if (oldDate == date) {
+                        spam++;
+                    } else {
+                        oldDate = date;
+                        spam = 0;
+                    }
+                    console.log("SPAM: " + spam);
+
+                    if (spam > 1) {
+                        alert("SPAM Terdeteksi.");
+                        return;
+                    }
+                    let indicator = addTextBox2(user_photo, "Mengirim konfirmasi obrolan...", date);
+                    indicators.push(indicator);
+                    sendKeyRSA(userID, function() {
+                        indicator.setAttribute("class", "h4 bi bi-check");
+                    }, function() {
+                        indicator.setAttribute("class", "bi bi-ban");
+                    });
+                }
+                if (messageInput.value.replaceAll(" ", "").replaceAll("\n", "") == "") {
+                    messageInput.value = "";
+                    return;
+                }
+                let indicator = addTextBox2(user_photo, messageInput.value, date);
+                indicators.push(indicator);
+                if (messageInput.value) {
+                    let ciphertext = encryptAES(messageInput.value, getKey(userID));
+                    console.log("ciphertext: " + ciphertext);
+                    sendMessage(userID, ciphertext, function() {
+                        indicator.setAttribute("class", "bi bi-check");
+                    }, function() {
+                        indicator.setAttribute("class", "bi bi-ban");
+                    });
+                }
+                chatbox.scrollTop = chatbox.scrollHeight;
+                messageInput.value = "";
+            }
+
+            function addTextBox(photo, message, date) {
+                let classText = "d-flex flex-row justify-content-start mt-1";
+                if (margin == 0) {
+                    classText = "d-flex flex-row justify-content-start mt-4";
+                    margin = 1;
+                }
+                let div01 = document.createElement("div");
+                div01.setAttribute("class", classText);
+
+                /*let img01 = document.createElement("img");
+                img01.setAttribute("src", photo);
+                img01.setAttribute("alt", "avatar");
+                img01.setAttribute("class", "user-img-42");
+                div01.appendChild(img01);*/
+
+                let div02 = document.createElement("div");
+                div02.setAttribute("class", "p-3 ms-3 border chatbox  col-10 col-lg-6");
+                div01.appendChild(div02);
+
+                let p = document.createElement("p");
+                p.setAttribute("class", "small mb-0");
+                p.innerHTML = message.replaceAll("\n", "<br />");
+                div02.appendChild(p);
+
+                let div03 = document.createElement("div");
+                div03.setAttribute("class", "row");
+                div02.appendChild(div03);
+
+                let div04 = document.createElement("div");
+                div04.setAttribute("class", "col blockquote-footer text-secondary");
+                div04.appendChild(document.createTextNode(date));
+                div03.appendChild(div04);
+
+                chatbox.appendChild(div01);
+                chatbox.scrollTo(0, chatbox.scrollHeight);
+            }
+            function addTextBox2(photo, message, date) {
+                let classText = "d-flex flex-row justify-content-end mt-1";
+                if (margin == 1) {
+                    classText = "d-flex flex-row justify-content-end mt-4";
+                    margin = 0;
+                }
+                let div01 = document.createElement("div");
+                div01.setAttribute("class", classText);
+
+                let div02 = document.createElement("div");
+                div02.setAttribute("class", "p-3 me-3 bg-primary chatbox  col-10 col-lg-6");
+                //div02.setAttribute("style", "width: 50%");
+                div01.appendChild(div02);
+
+                /*let img01 = document.createElement("img");
+                img01.setAttribute("src", photo);
+                img01.setAttribute("alt", "avatar");
+                img01.setAttribute("class", "user-img-42");
+                div01.appendChild(img01);*/
+
+                let p = document.createElement("p");
+                p.setAttribute("class", "small mb-0 text-white");
+                p.innerHTML = message.replaceAll("\n", "<br />");
+                div02.appendChild(p);
+
+                let div03 = document.createElement("div");
+                div03.setAttribute("class", "row");
+                div02.appendChild(div03);
+
+                let div04 = document.createElement("div");
+                div04.setAttribute("class", "col blockquote-footer text-light");
+                div04.appendChild(document.createTextNode(date));
+                div03.appendChild(div04);
+
+                let p2 = document.createElement("p");
+                p2.setAttribute("class", "col col-1 text-light h5");
+                p2.setAttribute("align", "right");
+                div03.appendChild(p2);
+
+                let indicator = document.createElement("i");
+                indicator.setAttribute("class", "bi bi-clock");
+                p2.appendChild(indicator);
+
+                chatbox.appendChild(div01);
+                chatbox.scrollTo(0, chatbox.scrollHeight);
+                return indicator;
+            }
+            //addTextBox3(1, "default", "name", "")
+            function addTextBox3(id, photo, message, date, event1, event2, event3) {
+                let classText = "d-flex flex-row justify-content-start mt-1";
+                if (margin == 0) {
+                    classText = "d-flex flex-row justify-content-start mt-4";
+                    margin = 1;
+                }
+                let div01 = document.createElement("div");
+                div01.setAttribute("class", classText);
+
+
+                let div02 = document.createElement("div");
+                div02.setAttribute("class", "p-3 ms-3 border chatbox col-10 col-lg-6");
+                div01.appendChild(div02);
+
+                let p = document.createElement("p");
+                p.setAttribute("class", "small mb-0");
+                p.innerHTML = message.replaceAll("\n", "<br />") + "<br /><br />";
+                let grid = document.createElement("div");
+                grid.setAttribute("class", "d-grid");
+                p.appendChild(grid);
+                let buttonGroup = document.createElement("div");
+                buttonGroup.setAttribute("class", "btn-group");
+                
+
+                let button01 = document.createElement("button");
+                button01.setAttribute("class", "btn btn-danger");
+                button01.innerHTML = "<i class=\"bi bi-ban\"></i>&nbsp;Blokir";
+                button01.addEventListener("click", function() {
+                    event1(id, photo);
+                })
+                buttonGroup.appendChild(button01);
+
+                let button02 = document.createElement("button");
+                button02.setAttribute("class", "btn btn-outline-dark");
+                button02.innerHTML = "<i class=\"bi bi-trash\"></i>&nbsp;Hapus";
+                button02.addEventListener("click", function() {
+                    event2(id, photo);
+                })
+                buttonGroup.appendChild(button02);
+
+                let button03 = document.createElement("button");
+                button03.setAttribute("class", "btn btn-primary");
+                button03.innerHTML = "<i class=\"bi bi-check\"></i>&nbsp;Terima";
+                button03.addEventListener("click", function() {
+                    event3(id, photo);
+                })
+                buttonGroup.appendChild(button03);
+                grid.appendChild(buttonGroup);
+
+                div02.appendChild(p);
+
+                let div03 = document.createElement("div");
+                div03.setAttribute("class", "row");
+                div02.appendChild(div03);
+
+                let div04 = document.createElement("div");
+                div04.setAttribute("class", "col blockquote-footer text-secondary");
+                div04.appendChild(document.createTextNode(date));
+                div03.appendChild(div04);
+
+                chatbox.appendChild(div01);
+                chatbox.scrollTo(0, chatbox.scrollHeight);
+            }
+
+        </script>
+        <!-- Copied modal -->
+        <div id="copiedModal" class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Teks disalin.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer-->
+        <footer class="bg-dark py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; BASIS-64 2024</div></div>
+                    <div class="col-auto">
+                        <a class="link-light small" href="#!">Privacy</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Terms</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://basis64computer.github.io/basis64-website/js/feedback.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+        <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+        <script src="hybrid-crypto.min.js" type="text/javascript"></script>
+        <script src="js/jquery.min.js" type="text/javascript"></script>
+        <script src="js/linedtextarea.js"></script>
+        <link href="css/linedtextarea.css" type="text/css" rel="stylesheet"/>
+        <!-- Core theme JS-->
+        <script src="js/date.js"></script>
+        <script src="js/icons.js"></script>
+        <script src="js/cookie.js"></script>
+        <script src="js/scripts.js"></script>
+        <script src="js/contact.js"></script>
+        <script src="js/encrypt.js"></script>
+        <script src="js/database.js"></script>
+        <script src="js/user-photo.js"></script>
+        <script src="js/telegrambot.js"></script>
+        <script type="text/javascript">
+        </script>
+    </body>
+</html>
